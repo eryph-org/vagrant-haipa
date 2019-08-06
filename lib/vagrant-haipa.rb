@@ -1,6 +1,8 @@
 require 'vagrant-haipa/version'
 require 'vagrant-haipa/plugin'
 require 'vagrant-haipa/errors'
+require 'vagrant-haipa/driver'
+require 'vagrant-haipa/provider'
 
 module VagrantPlugins
   module Haipa
