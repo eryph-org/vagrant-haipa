@@ -8,8 +8,11 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
  
   #config.vm.provision :shell, :path => 'scripts/provision.sh'
+  #config.omnibus.chef_version = :latest
+ 
 
   config.vm.define :ubuntu do |ubuntu|
+
     ubuntu.vm.provider :haipa do |provider|
       provider.client_id = 'console'
       provider.client_key_file = 'console.key'
@@ -36,7 +39,7 @@ Vagrant.configure('2') do |config|
 
       provider.provision = {
         'hostname' => 'basic',
-        'user_data' => {
+        'userData' => {
           "package_upgrade": true,
           "chpasswd" => {
             "expire": false

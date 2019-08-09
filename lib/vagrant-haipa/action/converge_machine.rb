@@ -6,15 +6,20 @@ module VagrantPlugins
         def initialize(app, env)
           @app = app
           @machine = env[:machine]
-          @logger = Log4r::Logger.new('vagrant::haipa::converge')
+          @logger = Log4r::Logger.new('vagrant::haipa::converge_machine')
         end
 
         def call(env)
 
-          operation_result = @machine.provider.driver.converge(env,env[:generated_name])
-
-          # assign the machine id for reference in other commands
-          @machine.id = operation_result.machine_guid
+          name = env[:generated_name]
+          unless @machine.id.nil?
+            haipa_machine = @machine.provider.driver.machine
+            name = haipa_machine.name
+          end
+          
+          operation_result = @machine.provider.driver.converge(env, name)                  
+          @machine.id = operation_result.machine_guid if @machine.id.nil?
+          
 
           @app.call(env)
         end
@@ -31,7 +36,7 @@ module VagrantPlugins
           destroy_env.delete(:interrupted)
           destroy_env[:config_validate] = false
           destroy_env[:force_confirm_destroy] = true
-          env[:action_runner].run(Actions.action_destroy, destroy_env)
+          env[:action_runner].run(Action.action_destroy, destroy_env)
         end
       end
     end

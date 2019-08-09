@@ -38,12 +38,10 @@ GIT
 PATH
   remote: .
   specs:
-    vagrant-haipa (0.1.0)
+    vagrant-haipa (0.2.0)
       faraday (>= 0.8.6)
-      faraday-cookie_jar
-      haipa_compute
+      haipa_compute (>= 0.0.2)
       json
-      jwt (~> 2.2)
       log4r
 
 GEM
@@ -54,7 +52,7 @@ GEM
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
     concurrent-ruby (1.1.5)
-    debase (0.2.3)
+    debase (0.2.4)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.5)
     diff-lcs (1.3)
@@ -72,11 +70,13 @@ GEM
       ffi (>= 1.0.1)
     gyoku (1.3.1)
       builder (>= 2.1.2)
-    haipa_compute (0.0.1)
-      haipa_rest (~> 0.11.1)
-    haipa_rest (0.11.1)
+    haipa_compute (0.0.2)
+      haipa_rest (~> 0.11.2)
+    haipa_rest (0.11.2)
       concurrent-ruby (~> 1.0)
       faraday (~> 0.9)
+      faraday-cookie_jar (~> 0.0.6)
+      jwt (~> 2.2)
       ms_rest (~> 0.7.4)
       unf_ext (= 0.0.7.2)
     hashicorp-checkpoint (0.1.5)
@@ -181,4 +181,4 @@ DEPENDENCIES
   vagrant-spec!
 
 BUNDLED WITH
-   1.17.2
+   2.0.1

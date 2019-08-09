@@ -55,7 +55,11 @@ module VagrantPlugins
         haipa_machine_list.value.first
       end
 
-      def converge(env,name)
+      def machine(expand = nil)
+        compute_api.client.machines.get(@machine.id, :expand => expand)
+      end
+
+      def converge(env, name)
 
         machine_config_hash = {
           'name' => name,                           
@@ -66,8 +70,25 @@ module VagrantPlugins
         machine_config = compute_api.deserialize(:MachineConfig, machine_config_hash)
         operation = compute_api.client.machines.update_or_create(:config => machine_config)
 
+        wait_for_operation(env,operation) 
+      end
+
+      def start(env)
+        operation = compute_api.client.machines.start(@machine.id)
         wait_for_operation(env,operation)
       end
+
+      def stop(env)
+        operation = compute_api.client.machines.stop(@machine.id)
+        wait_for_operation(env,operation)
+      end
+
+      def delete(env)
+        operation = compute_api.client.machines.delete(@machine.id)
+        wait_for_operation(env,operation)
+      end
+
+      protected
 
       def wait_for_operation(env,operation)
         timestamp = '2018-09-01T23:47:17.50094+02:00'
@@ -97,7 +118,7 @@ module VagrantPlugins
 
             result.log_entries.each do |entry|
               env[:ui].info(entry.message)
-              timestamp = entry.timestamp + 1
+              timestamp = entry.timestamp
             end
           
             yield result if block_given?

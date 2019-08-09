@@ -18,5 +18,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "faraday", ">= 0.8.6"
   gem.add_dependency "json"
   gem.add_dependency "log4r"
-  gem.add_dependency "haipa_compute"
+  gem.add_dependency "haipa_compute", ">= 0.0.2"
 end
