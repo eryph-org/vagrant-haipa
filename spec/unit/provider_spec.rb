@@ -12,7 +12,7 @@ RSpec.describe VagrantPlugins::Haipa::Provider do
     stub_const("Vagrant::Util::Platform", platform)
     allow(machine).to receive(:id).and_return("foo")
   end
-
+  
   describe "#driver" do
     it "is initialized" do
       expect(subject.driver).to be_kind_of(VagrantPlugins::Haipa::Driver)
