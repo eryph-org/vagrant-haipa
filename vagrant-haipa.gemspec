@@ -19,5 +19,4 @@ Gem::Specification.new do |gem|
   gem.add_dependency "json"
   gem.add_dependency "log4r"
   gem.add_dependency "haipa_compute"
-
 end

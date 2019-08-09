@@ -6,7 +6,18 @@ module VagrantPlugins
       This plugin installs a provider that allows Vagrant to manage
       machines in Haipa.
       DESC
-    end
+
+      config(:haipa, :provider) do
+        require_relative 'config'
+        Config
+      end      
+
+      provider(:haipa, parallel: true, defaultable: false, box_optional: true) do
+        require_relative 'provider'
+        Provider
+      end
+  
+    end    
   end
 end
     

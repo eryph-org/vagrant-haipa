@@ -10,9 +10,10 @@ GIT
 
 GIT
   remote: https://github.com/mitchellh/vagrant.git
-  revision: 1dda6cc14c2d221a8e2e7b5091fed2fca9ba1ecf
+  revision: 37dc3dc6489e2a0ecc7b20ca73719e8c1ce2a4e2
+  tag: v2.2.3
   specs:
-    vagrant (2.2.6.dev)
+    vagrant (2.2.3)
       bcrypt_pbkdf (~> 1.0.0)
       childprocess (~> 0.6.0)
       ed25519 (~> 1.2.4)
@@ -39,8 +40,10 @@ PATH
   specs:
     vagrant-haipa (0.1.0)
       faraday (>= 0.8.6)
+      faraday-cookie_jar
       haipa_compute
       json
+      jwt (~> 2.2)
       log4r
 
 GEM
@@ -61,6 +64,9 @@ GEM
     erubis (2.7.0)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
+    faraday-cookie_jar (0.0.6)
+      faraday (>= 0.7.4)
+      http-cookie (~> 1.0.0)
     ffi (1.11.1-x64-mingw32)
     gssapi (1.3.0)
       ffi (>= 1.0.1)
@@ -80,6 +86,7 @@ GEM
     i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     json (2.2.0)
+    jwt (2.2.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -166,7 +173,6 @@ PLATFORMS
 
 DEPENDENCIES
   debase
-  rake
   rspec
   ruby-debug-ide
   vagrant!
