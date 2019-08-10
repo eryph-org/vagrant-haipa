@@ -62,12 +62,15 @@ module VagrantPlugins
       def converge(env, name)
 
         machine_config_hash = {
-          'name' => name,                           
-          'vm' => @machine.provider_config.vm_config,
-          "provisioning" => @machine.provider_config.provision   
+          :name => name,                           
+          :vm => @machine.provider_config.vm_config,
+          :provisioning => @machine.provider_config.provision   
         }
 
-        machine_config = compute_api.deserialize(:MachineConfig, machine_config_hash)
+        # this will convert all symbols to strings as required by deserialize
+        machine_config_string_hash = JSON.parse(machine_config_hash.to_json)
+        
+        machine_config = compute_api.deserialize(:MachineConfig, machine_config_string_hash)
         operation = compute_api.client.machines.update_or_create(:config => machine_config)
 
         wait_for_operation(env,operation) 
