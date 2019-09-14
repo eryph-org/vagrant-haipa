@@ -9,26 +9,23 @@ module VagrantPlugins
           @logger = Log4r::Logger.new('vagrant::haipa::converge_machine')
         end
 
-        def call(env)
+        def call(env)        
 
-          name = env[:generated_name]
-          unless @machine.id.nil?
-            haipa_machine = @machine.provider.driver.machine
-            name = haipa_machine.name
+          # terminate only if machine has been created by this action
+          if @machine.id.nil?
+            env[:converge_cleanup] = true
           end
-          
-          operation_result = @machine.provider.driver.converge(env, name)                  
+
+          operation_result = @machine.provider.driver.converge(env)                  
           @machine.id = operation_result.machine_guid if @machine.id.nil?
           
 
           @app.call(env)
         end
 
-        # Both the recover and terminate are stolen almost verbatim from
-        # the Vagrant AWS provider up action
         def recover(env)
           return if env['vagrant.error'].is_a?(Vagrant::Errors::VagrantError)
-          terminate(env) if @machine.state.id != :not_created
+          terminate(env) if @machine.state.id != :not_created && env[:converge_cleanup] == true
         end
 
         def terminate(env)

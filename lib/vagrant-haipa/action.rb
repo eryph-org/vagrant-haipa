@@ -10,7 +10,6 @@ module VagrantPlugins
           b.use Call, IsCreated do |env, b2|
 
             if !env[:result]
-              b2.use SetName     
               b2.use ConvergeMachine 
             end
           end
@@ -165,7 +164,6 @@ module VagrantPlugins
       autoload :ReadState, action_root.join('read_state')
       autoload :IsCreated, action_root.join('is_created')
       autoload :IsRunning, action_root.join('is_running')
-      autoload :SetName, action_root.join('set_name')
       autoload :ConvergeMachine, action_root.join('converge_machine')
       autoload :DeleteMachine, action_root.join('delete_machine')
       autoload :StartMachine, action_root.join('start_machine')      

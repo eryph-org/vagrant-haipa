@@ -9,6 +9,8 @@ module VagrantPlugins
 
       def initialize(machine)
         @machine = machine
+        @logger = Log4r::Logger.new('vagrant::haipa::driver')
+ 
       end
 
       # @return [::Haipa::Client::Compute::ApiConfiguration] Haipa Compute API
@@ -50,19 +52,23 @@ module VagrantPlugins
         haipa_machine.status
       end
       
-      def machine_by_name(name)
-        haipa_machine_list = compute_api.client.machines.list(:filter=>"name eq '#{name}'")
-        haipa_machine_list.value.first
-      end
-
       def machine(expand = nil)
         compute_api.client.machines.get(@machine.id, :expand => expand)
       end
 
-      def converge(env, name)
+      def machine_name
+        unless @machine.provider_config.name.nil?
+          @machine.provider_config.name
+        else
+          @machine.name
+        end        
+      end
+
+      def converge(env)
 
         machine_config_hash = {
-          :name => name,                           
+          :name => machine_name, 
+          :id =>  @machine.id,                         
           :vm => @machine.provider_config.vm_config,
           :provisioning => @machine.provider_config.provision   
         }
