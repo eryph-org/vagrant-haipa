@@ -1,0 +1,27 @@
+en:
+  vagrant_haipa:
+    info:
+      not_created: "Machine has not been created"
+      already_active: "Machine is already active"
+      stop_machine: "Stopping the machine..."
+      start_machine: "Starting the machine..."
+      creating: "Creating a new machine..."
+      machine_ip: "Assigned IP address: %{ip}"
+      destroying: "Destroying the machine..."
+      will_not_destroy: |-
+        The instance '%{name}' will not be destroyed, since the confirmation
+        was declined.      
+      already_status: |-
+        The machine is already %{status}.        
+    errors:
+      api_status: |-
+        There was an issue with the request made to the Haipa
+        API at:
+
+        Path: %{path}
+        URI Params: %{params}
+
+        The response status from the API was:
+
+        Status: %{status}
+        Response: %{response}

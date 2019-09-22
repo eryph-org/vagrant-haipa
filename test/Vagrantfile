@@ -1,0 +1,61 @@
+REQUIRED_PLUGINS = %w(vagrant-haipa)
+
+Vagrant.configure('2') do |config|
+
+  config.ssh.username = 'ubuntu'
+  config.ssh.password = 'ubuntu'
+  
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+ 
+  #config.vm.provision :shell, :path => 'scripts/provision.sh'
+  #config.omnibus.chef_version = :latest
+ 
+
+  config.vm.define :ubuntu do |ubuntu|
+
+    ubuntu.vm.provider :haipa do |provider|
+      provider.client_id = 'console'
+      provider.client_key_file = 'console.key'
+      provider.identity_endpoint = 'https://localhost:62189/identity'
+      provider.api_endpoint = 'https://localhost:62189/api'
+      provider.vm_config = {
+        'memory' => {
+          'startup' => 2096
+        },
+        'drives' => [
+          {
+            'name' => 'sda',
+            'template' => 'T:\openstack\ubuntu-xenial.vhdx',
+            'size' => 40
+          },
+          {
+            'name' => 'sdb',
+            'size' => 4
+          },
+          {
+            'name' => 'sdc',
+            'size' => 4
+          }
+        ],  
+        'networkAdapters' => [
+          {
+            'name' => "eth0",
+            'switchName' => "Default Switch",
+          }                                                          
+        ] ,
+      }
+
+      provider.provision = {
+        'method' => 'cloudInit',
+        'hostname' => 'basic',
+        'userData' => {
+          "package_upgrade": false,
+          "chpasswd" => {
+            "expire": false
+            },
+          "password" => "ubuntu"      
+        }
+      }
+    end
+  end
+end
