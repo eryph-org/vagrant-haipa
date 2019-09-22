@@ -1,4 +1,5 @@
 require 'haipa_compute'
+require 'time'
 
 module VagrantPlugins
   module Haipa
@@ -100,7 +101,7 @@ module VagrantPlugins
       protected
 
       def wait_for_operation(env,operation)
-        timestamp = '2018-09-01T23:47:17.50094+02:00'
+        timestamp = DateTime.parse('2018-09-01T23:47:17.50094+02:00')
 
         operation_error = nil
         
@@ -123,13 +124,19 @@ module VagrantPlugins
             next if env[:interrupted]
 
             # check action status
-            result = compute_api.client.operations.get(operation.id, :expand => "LogEntries($filter=Timestamp gt #{timestamp})")
+            result = compute_api.client.operations.get(operation.id, :expand => "LogEntries($filter=Timestamp gt #{timestamp.iso8601})")
 
             result.log_entries.each do |entry|
-              env[:ui].info(entry.message)
-              timestamp = entry.timestamp
+              if timestamp < entry.timestamp     
+                env[:ui].info(entry.message) 
+                timestamp = entry.timestamp
+
+                # randomized delay for smoother output
+                delay = rand(4) * 0.2
+                sleep delay
+              end
             end
-          
+
             yield result if block_given?
 
             raise 'Operation not completed' if result.status == 'Running'
@@ -139,6 +146,13 @@ module VagrantPlugins
 
         raise "Operation failed: #{result.status_message}" if result.status == 'Failed'   
         
+        #write latest log entries
+        result = compute_api.client.operations.get(operation.id, :expand => "LogEntries($filter=Timestamp gt #{timestamp.iso8601})")
+        result.log_entries.each do |entry|
+          env[:ui].info(entry.message) if timestamp < entry.timestamp     
+          timestamp = entry.timestamp if timestamp < entry.timestamp
+        end
+
         #refresh operation result
         compute_api.client.operations.get(operation.id)
       end
