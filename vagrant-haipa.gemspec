@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "log4r"
-  gem.add_dependency "haipa_compute", ">= 0.1.0"
+  gem.add_dependency "haipa_compute", ">= 0.2.2"
 end

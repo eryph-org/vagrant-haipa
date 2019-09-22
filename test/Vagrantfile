@@ -4,7 +4,7 @@ Vagrant.configure('2') do |config|
 
   config.ssh.username = 'ubuntu'
   config.ssh.password = 'ubuntu'
-
+  
   config.vm.synced_folder ".", "/vagrant", disabled: true
  
   #config.vm.provision :shell, :path => 'scripts/provision.sh'
@@ -18,15 +18,23 @@ Vagrant.configure('2') do |config|
       provider.client_key_file = 'console.key'
       provider.identity_endpoint = 'https://localhost:62189/identity'
       provider.api_endpoint = 'https://localhost:62189/api'
-
       provider.vm_config = {
-         'memory' => {
-          'startup' => 2048
+        'memory' => {
+          'startup' => 2096
         },
-        'disks' => [
+        'drives' => [
           {
+            'name' => 'sda',
             'template' => 'T:\openstack\ubuntu-xenial.vhdx',
-            'size' => 20
+            'size' => 40
+          },
+          {
+            'name' => 'sdb',
+            'size' => 4
+          },
+          {
+            'name' => 'sdc',
+            'size' => 4
           }
         ],  
         'networkAdapters' => [
@@ -38,9 +46,10 @@ Vagrant.configure('2') do |config|
       }
 
       provider.provision = {
+        'method' => 'cloudInit',
         'hostname' => 'basic',
         'userData' => {
-          "package_upgrade": true,
+          "package_upgrade": false,
           "chpasswd" => {
             "expire": false
             },
